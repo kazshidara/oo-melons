@@ -10,21 +10,29 @@ class AbstractMelonOrder():
         self.qty = qty
         self.shipped = False
 
-    def get_base_price():
+        if self.qty > 100:
+            raise TooManyMelonsError
+
+    def get_base_price(self):
         """ Gets a random base price between 5 and 9"""
-        base_price = random.randint(5,10)
+        base_price = random.randint(5,9)
+        print(base_price)
+
+        # see if the order was placed during rush hour
         now = datetime.datetime.now()
 
         dow = now.weekday() # Mon is 0, Sun is 6
         hour = now.hour
 
+        if hour >= 8 and hour < 11 and dow >= 0 and dow < 5:
+            base_price += 4
 
         return base_price
 
     def get_total(self):
         """Calculate price, including tax."""
 
-        base_price = get_base_price()
+        base_price = self.get_base_price()
 
         if self.species == "Christmas":
             base_price = base_price * 1.5
@@ -86,3 +94,12 @@ class GovernmentMelonOrder(AbstractMelonOrder):
             self.passed_inspection = True
 
         return True
+
+class TooManyMelonsError(ValueError):
+    """ Error Class"""
+
+    pass
+    # def __init__(self, expression, message):
+    #     # self.expression = expression
+    #     # self.message = message
+    #     super().__init__("TooManyMelonsError",": Can't have more than 100 melons")
