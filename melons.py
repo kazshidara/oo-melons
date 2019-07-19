@@ -1,4 +1,6 @@
 """Classes for melon orders."""
+import random
+import datetime
 
 class AbstractMelonOrder():
     """An abstract base class that other Melon Orders inherit from"""
@@ -8,10 +10,21 @@ class AbstractMelonOrder():
         self.qty = qty
         self.shipped = False
 
+    def get_base_price():
+        """ Gets a random base price between 5 and 9"""
+        base_price = random.randint(5,10)
+        now = datetime.datetime.now()
+
+        dow = now.weekday() # Mon is 0, Sun is 6
+        hour = now.hour
+
+
+        return base_price
+
     def get_total(self):
         """Calculate price, including tax."""
 
-        base_price = 5
+        base_price = get_base_price()
 
         if self.species == "Christmas":
             base_price = base_price * 1.5
